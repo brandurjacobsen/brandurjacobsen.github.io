@@ -26,7 +26,7 @@ layout: default
   <div class="row spacer-y">
       <div class="col-12">
           <div class="big-banner rounded">
-              <h3 class="text-success p-3 pb-0">"{{ page.series_title | upcase }}" series:</h3>
+              <h3 class="text-success p-3 pb-0">"{{ page.series_title }}" series:</h3>
               {% assign posts = site.posts | where: "is_series", true | where: "series_title", page.series_title |
               sort: 'date' %}
               {% for post in posts %}
