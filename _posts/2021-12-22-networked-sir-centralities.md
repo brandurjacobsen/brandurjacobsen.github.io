@@ -260,12 +260,12 @@ but computes the CSFs using degree centrality and betweenness centrality respect
 ```
 
 <figure>
-  <img src="img/net-sir-csf1.png" alt="simulation using degree centrality">
+  <img src="/static/images/net-sir-csf1.png" alt="simulation using degree centrality">
   <figcaption>Plot 1 of networked SIR model using degree centrality for CSFs.</figcaption>
 </figure>
 
 <figure>
-  <img src="img/net-sir-csf2.png" alt="simulation using degree centrality">
+  <img src="/static/images/net-sir-csf2.png" alt="simulation using degree centrality">
   <figcaption>Plot 2 of networked SIR model using betweenness centrality for CSFs.
   </figcaption>
 </figure>
