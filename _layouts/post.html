@@ -1,0 +1,48 @@
+---
+layout: default
+---
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h2 class="post-title p-name" itemprop="name headline">{{ page.title | escape }}</h2>
+    <p class="post-meta">
+      <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+        {{ page.date | date: date_format }}
+      </time>
+      {%- if page.author -%}
+        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+      {%- endif -%}</p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    {{ content }}
+  </div>
+<!-- Article footer -->
+<div class="article-footer">
+  <!-- Series links -->
+  {% if page.is_series == true %}
+  <div class="row spacer-y">
+      <div class="col-12">
+          <div class="big-banner rounded">
+              <h3 class="text-success p-3 pb-0">'{{ page.series_title | upcase }}' series:</h3>
+              {% assign posts = site.posts | where: "is_series", true | where: "series_title", page.series_title |
+              sort: 'date' %}
+              {% for post in posts %}
+                {% if post.title == page.title %}
+                  <p class="nav-link bullet-pointer mb-0">{{ post.title }}</p>
+                {% else %}
+                  <a class="nav-link bullet-hash" href="{{ post.url }}">{{ post.title }}</a>
+                {% endif %}
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+  {% endif %}
+</div>
+  {%- if site.disqus.shortname -%}
+    {%- include disqus_comments.html -%}
+  {%- endif -%}
+
+  <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+</article>
