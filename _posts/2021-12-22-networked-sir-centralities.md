@@ -259,12 +259,12 @@ but computes the CSFs using degree centrality and betweenness centrality respect
     theme_light()
 ```
 
-<figure>
+<figure align="center">
   <img src="/static/images/net-sir-csf1.png" alt="simulation using degree centrality">
   <figcaption>Plot 1 of networked SIR model using degree centrality for CSFs.</figcaption>
 </figure>
 
-<figure>
+<figure align="center">
   <img src="/static/images/net-sir-csf2.png" alt="simulation using degree centrality">
   <figcaption>Plot 2 of networked SIR model using betweenness centrality for CSFs.
   </figcaption>
@@ -285,9 +285,7 @@ Even so, CSFs using degree and betweenness centrality are strongly correlated ( 
 It appears that using CSFs provides us with additional information about how a pathogen spreads through
 a population in the networked SIR model.<br>
 In the next post I will be using CSFs as predictors in sparse regression when using SINDy,
-and leave it up to the LASSO algorithm to decide whether the CSF predictors should be included in the resulting model.<br>
-It turns out that LASSO loves CSFs!
-
+and leave it up to the LASSO algorithm to decide whether the CSF predictors should be included in the resulting model.
 
 <h3>References</h3>
 [Dekker, 2013] Dekker, A. H. Network centrality and super-spreaders in infectious disease epidemiology.
