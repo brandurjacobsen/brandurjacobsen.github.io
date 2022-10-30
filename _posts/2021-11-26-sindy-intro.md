@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Intro to SINDy"
+title:  "Intro to Sparse Identification of Nonlinear Dynamics (SINDy)"
 date:   2021-11-26 17:21:40 +0200
 is_series: true
 series_title: "SIR-SINDy"
