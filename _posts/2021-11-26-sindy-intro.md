@@ -99,7 +99,7 @@ A crucial question is which basis functions to use in \\( \Theta \\). Here physi
 Obtaining a system of ordinary differential equations (ODEs) can be achieved (in a sequential manner) by a straight-forward generalization of the above &mdash;
 just include all predictors (and functions/interactions thereof) in the \\( \Theta \\) matrix, and fit the derivatives using for example LASSO.
 
-In this series of blog articles, we will be using SINDy to obtain a parsimonious, continuous model of the <a href="{% post_url 2021-12-14-networked-sir %}">Networked SIR Model</a>, i.e. we'll take data from simulations of a stochastic, discrete time model, and obtain a time continuous and deterministic model by way of SINDy. In doing so, we hope via dynamical system techniques, to obtain some insights regarding the effects of network topology on the dynamics of the simulation.
+In this series of blog articles, we will be using SINDy to obtain a parsimonious, model of the <a href="{% post_url 2021-12-14-networked-sir %}">Networked SIR Model</a>, i.e. we'll take data from simulations of a stochastic, continuous time, discrete state model, and obtain a deterministic, continuous time/state model by way of SINDy. In doing so, we hope via dynamical system techniques, to obtain some insights regarding the effects of network topology on the dynamics of the simulation.
 
 ### References:
 [Brunton et al. 2016] Brunton, S. L., Proctor, J. L., Kutz, J. N. & Bialek, W.
