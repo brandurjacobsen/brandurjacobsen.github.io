@@ -1,10 +1,8 @@
 ---
-layout: page
-title: About me
-permalink: /about/
+title: About
 ---
 
-Hello, my name is Brandur, and this is my personal homepage/blog.
+Hello, my name is Brandur, and this is my blog
 
 I live in Vesterbro, Copenhagen, with my wife Rosa and my son Ørvur.
 

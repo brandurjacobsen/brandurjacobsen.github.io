@@ -1,11 +1,9 @@
 ---
-layout: post
-title:  "Intro to Sparse Identification of Nonlinear Dynamics (SINDy)"
-date:   2021-11-26 17:21:40 +0200
-is_series: true
-series_title: "SIR-SINDy"
+date:
+  created: 2021-11-26
 ---
 
+# Intro to Sparse Identification of Nonlinear Dynamics (SINDy)
 
 <em>Sparse Identification of Nonlinear Dynamics</em> (SINDy) is a systems identification method introduced in [Brunton et al., 2016].
 Here the authors postulate that most dynamical systems given by a (autonomous) ordinary differential equation (ODE)

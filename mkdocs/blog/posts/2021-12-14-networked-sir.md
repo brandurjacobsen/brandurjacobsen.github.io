@@ -1,10 +1,9 @@
 ---
-layout: post
-title:  "The Networked SIR model"
-date:   2021-12-14 17:21:40 +0200
-is_series: true
-series_title: "SIR-SINDy"
+date:
+  created: 2021-12-14
 ---
+
+# The Networked SIR model
 
 In the <a href="{% post_url 2021-12-09-sir-intro %}">previous post</a> we introduced the SIR model,
 and argued that a networked model might be more appropriate if one seeks
