@@ -1,16 +1,20 @@
-site_name: Brandur's blog
+site_name: Brandur's place
 site_url: https://brandurjacobsen.github.io
 repo_url: https://github.com/brandurjacobsen/brandurjacobsen.github.io
 
 theme:
   name: material
+  palette:
+    scheme: slate
 
 docs_dir: mkdocs
 site_dir: docs # Github pages wants '/' or '/docs' to serve content
 
 plugins:
   - search
-  - blog
+  - blog:
+      archive_toc: true
+  - tags
 
 markdown_extensions:
   - pymdownx.arithmatex:

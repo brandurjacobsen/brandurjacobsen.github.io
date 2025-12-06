@@ -1,0 +1,696 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://brandurjacobsen.github.io/blog/2021/11/26/intro-to-sparse-identification-of-nonlinear-dynamics-sindy/">
+      
+      
+      
+        <link rel="next" href="../../../12/09/the-susceptible-infected-recovered-sir-model/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>Intro to Sparse Identification of Nonlinear Dynamics (SINDy) - Brandur's place</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#intro-to-sparse-identification-of-nonlinear-dynamics-sindy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../../../.." title="Brandur&#39;s place" class="md-header__button md-logo" aria-label="Brandur's place" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Brandur's place
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Intro to Sparse Identification of Nonlinear Dynamics (SINDy)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/brandurjacobsen/brandurjacobsen.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../../.." title="Brandur&#39;s place" class="md-nav__button md-logo" aria-label="Brandur's place" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Brandur's place
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/brandurjacobsen/brandurjacobsen.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Blog
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href="../../../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Posts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Archive
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Archive
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../archive/2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2021
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        References:
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../../" class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2021-11-26 00:00:00+00:00" class="md-ellipsis">November 26, 2021</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              4 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+  <nav class="md-tags" >
+    
+      
+      
+      
+      
+        <span class="md-tag">Master's thesis</span>
+      
+    
+  </nav>
+
+
+  
+  
+
+
+<h1 id="intro-to-sparse-identification-of-nonlinear-dynamics-sindy">Intro to Sparse Identification of Nonlinear Dynamics (SINDy)</h1>
+<p><em>Sparse Identification of Nonlinear Dynamics</em> (SINDy) is a systems identification method introduced in [Brunton et al., 2016].
+Here the authors postulate that most dynamical systems given by a (autonomous) ordinary differential equation (ODE)</p>
+<div class="arithmatex">\[ {d\over dt}\,s(t) = \dot s(t)= f(s(t)) \qquad (1) \]</div>
+<p>(where <span class="arithmatex">\( s(t) \in \mathbb R \)</span> is assumed to be at least once differentiable with respect to time <span class="arithmatex">\( t \)</span>)
+typically have relatively few terms on the right-hand side, given by the function <span class="arithmatex">\( f \)</span>. And thus, given time-series observations of <span class="arithmatex">\( s(t) \)</span>, written here as <span class="arithmatex">\( s_{t_i},\; i \in \{1,2,\ldots,n-1,n\} \)</span>,
+one might be able to use sparse linear regression techniques to obtain a pointwise approximation of the derivative <span class="arithmatex">\(\dot s(t) \)</span> in (1).<br></p>
+<p>This results in a sparse linear regression estimator <span class="arithmatex">\(\xi \)</span> (vector of coefficients with few non-zero entries),
+by which one can approximate the function <span class="arithmatex">\( f \)</span>.<br>
+Finding a sparse estimator <span class="arithmatex">\(\xi \)</span> corresponds to finding a parsimonious model for the process <span class="arithmatex">\( s(t) \)</span>.</p>
+<p>If the derivatives <span class="arithmatex">\( \dot s_{t_i},\; i \in \{1,2,\ldots,n-1,n\} \)</span> are not part of the observations (which they seldom are), then these need to be approximated using, for example, finite difference, or the derivatives of a fitted smoothing spline, because these make out the target in the sparse linear regression.</p>
+<p>Let's elaborate a little on this:<br>
+Say you have <span class="arithmatex">\(n\)</span> observations <span class="arithmatex">\( s_{t_i},\; i \in \{1,2,\ldots,n-1,n\} \)</span> of some dynamical process <span class="arithmatex">\(s(t)\)</span>
+that is assumed to be differentiable with respect to time <span class="arithmatex">\(t\)</span>,
+and that you want to approximate the governing equation of <span class="arithmatex">\(s(t)\)</span> in the form of (1).</p>
+<p>When using SINDy we assume that <span class="arithmatex">\( f(s_{t_i}) \)</span> can be approximated as</p>
+<div class="arithmatex">\[ f(s_{t_i}) \approx [\Theta\,\xi]_i \qquad (i'\text{th entry in vector})\]</div>
+<p>where the <span class="arithmatex">\( \Theta \in \mathbb R^{n \times p} \)</span> matrix has nonlinear functions of the observations as columns,
+and <span class="arithmatex">\( \xi \in \mathbb R^p \)</span> is a column vector of coefficients to be determined.<br>
+For example using polynomial basis function in <span class="arithmatex">\( \Theta \)</span> up to 4th order (no intercept)</p>
+<div class="arithmatex">\[ 
+\Theta = \begin{bmatrix} s_{t_1} &amp; s_{t_1}^2 &amp; s_{t_1}^3 &amp; s_{t_1}^4 \\
+                            s_{t_2} &amp; s_{t_2}^2 &amp; s_{t_2}^3 &amp; s_{t_2}^4\\
+                            \vdots &amp; \vdots &amp; \vdots \\
+                            s_{t_n} &amp; s_{t_n}^2 &amp; s_{t_n}^3 &amp; s_{t_n}^4 \\
+\end{bmatrix} 
+\]</div>
+<p>where we have <span class="arithmatex">\( p = 4 \)</span>.</p>
+<p>Let <span class="arithmatex">\( \dot S \in \mathbb R^n \)</span> be the column vector of derivatives, i.e. <span class="arithmatex">\( \dot S = (\dot s_{t_1}, \dot s_{t_2},\ldots, \dot s_{t_n})^\top \)</span>,
+then these can be written down (according to our assumptions) as</p>
+<div class="arithmatex">\[ \dot S = \Theta\,\xi + \epsilon\]</div>
+<p>where <span class="arithmatex">\( \epsilon \)</span> is the residual vector.</p>
+<p>If one estimates <span class="arithmatex">\( \xi \)</span> (minimizes the residual vector <span class="arithmatex">\( \epsilon \)</span> ) using ordinary least squares (OLS), i.e.</p>
+<div class="arithmatex">\[ \xi^* = \text{arg}\min\limits_{\xi}\, ||\dot S - \Theta\,\xi||_2^2 \]</div>
+<p>then the solution</p>
+<div class="arithmatex">\[ \xi^*=(\Theta^\top \Theta)^{-1}\Theta^\top \dot S \]</div>
+<p>will have <span class="arithmatex">\( p \)</span> non-zero entries. Nothing sparse about that...<br>
+Using SINDy, the point is rather to use sparse regression, that results in <span class="arithmatex">\( \xi^* \)</span> having  <span class="arithmatex">\( q,\; 0 &lt; q &lt; p \)</span> non-zero entries,
+corresponding to <span class="arithmatex">\( q \)</span> terms in the governing equation. <br>
+If <span class="arithmatex">\( q \)</span> is small, and the fit is acceptable, then we have succeeded in finding
+a parsimonious approximation of the governing equations of <span class="arithmatex">\( s(t) \)</span>, i.e.</p>
+<div class="arithmatex">\[ \dot s(t) \approx \theta(s(t))^\top\,\xi^* \]</div>
+<p>where <span class="arithmatex">\( \theta(s(t))^\top \)</span> is a row vector of nonlinear functions of <span class="arithmatex">\( s(t) \)</span>.<br>
+I.e. using up to 4th order polynomial basis functions as above we have</p>
+<div class="arithmatex">\[ \dot s(t) \approx ( s(t), s(t)^2, s(t)^3, s(t)^4 )\,\xi^*  \]</div>
+<p>which are the same functions as in the columns of <span class="arithmatex">\( \Theta \)</span>.</p>
+<p>The <em>Least Absolute Shrinkage and Selection Operator</em> (LASSO) [Tibshirani, 1996] is an ideal candidate method to use in the sparse regression step,
+which also is noted by the authors of [Brunton et al. 2016].<br>
+The LASSO finds the estimator by minimizing</p>
+<div class="arithmatex">\[ \xi^* = \text{arg}\min\limits_{\xi}\, ||\dot S - \Theta\,\xi||_2^2 + \lambda\,||\xi||_1 \qquad (2) \]</div>
+<p>where <span class="arithmatex">\( \lambda &gt; 0 \)</span> imposes a penalty on the <span class="arithmatex">\( \ell_1 \)</span> norm of the estimator. Using the <span class="arithmatex">\( \ell_1 \)</span> norm results
+in (depending on the magnitude of <span class="arithmatex">\( \lambda \)</span>) some entries of <span class="arithmatex">\( \xi^* \)</span> being effectively zero.
+Thereby, the LASSO acts as a model selection method parameterized by <span class="arithmatex">\( \lambda \)</span>.
+Note that the LASSO estimator converges to the OLS estimator as <span class="arithmatex">\( \lambda \rightarrow 0 \)</span>.</p>
+<p>The solution to (2) has to be found numerically, and one can for example use the <samp>lars</samp> or <samp>glmnet</samp> packages in <samp>R</samp> to achieve this.<br>
+For estimating derivatives one can for example use <samp>smooth.spline</samp> from the <samp>stats</samp> package.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>SINDy is a powerful, yet simple, method to approximate the governing equations of systems, for which there is some data available.<br>
+In addition, is is quite modular, in the sense that there are many options available for estimating derivatives, constructing the <span class="arithmatex">\( \Theta \)</span> matrix,
+and obtaining the linear estimator <span class="arithmatex">\( \xi \)</span>.<br>
+A crucial question is which basis functions to use in <span class="arithmatex">\( \Theta \)</span>. Here physical knowledge of the system under investigation can provide some clues.<br>
+Obtaining a system of ordinary differential equations (ODEs) can be achieved (in a sequential manner) by a straight-forward generalization of the above &mdash;
+just include all predictors (and functions/interactions thereof) in the <span class="arithmatex">\( \Theta \)</span> matrix, and fit the derivatives using for example LASSO.</p>
+<p>In this series of blog articles, we will be using SINDy to obtain a parsimonious, model of the <a href="../../../12/14/the-networked-sir-model/">Networked SIR Model</a>, i.e. we'll take data from simulations of a stochastic, continuous time, discrete state model, and obtain a deterministic, continuous time/state model by way of SINDy. In doing so, we hope via dynamical system techniques, to obtain some insights regarding the effects of network topology on the dynamics of the simulation.</p>
+<h2 id="references">References:</h2>
+<p>[Brunton et al. 2016] Brunton, S. L., Proctor, J. L., Kutz, J. N. &amp; Bialek, W.
+Discovering governing equations from data by sparse identification of nonlinear dynamical systems. Proc. Natl. Acad. Sci. U. S. A. 113, 3932–3937 (2016)</p>
+<p>[Tibshirani, 1996] Tibshirani, R. Regression Shrinkage and Selection Via the Lasso. J. R. Stat. Soc. Ser. B 58, 267–288 (1996).</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../../..", "features": [], "search": "../../../../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="../../../../../javascript/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

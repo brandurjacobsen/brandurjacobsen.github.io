@@ -1,33 +1,35 @@
 ---
 date:   
   created: 2021-12-22
+tags: 
+  - Master's thesis
 ---
 
 # Centrality Measures and The Networked SIR Model
 
-<em>Note: In this, and all posts in this series, the terms "graph" and "network" are used interchangeably.
-The same applies to the terms "node", "vertex" and "individual".</em>
+*Note: In this, and all posts in this series, the terms "graph" and "network" are used interchangeably.
+The same applies to the terms "node", "vertex" and "individual".*
 
 In this post I will be talking about how observations of network centralities,
-from simulations of the networked SIR model (previous post),
-may be used as predictors when applying the SINDy systems identification method (another previous post).
+from simulations of the networked SIR model [(previous post)](networked-sir.md),
+may be used as predictors when applying the SINDy systems identification method [(another previous post)](sindy-intro.md).
 
 Centrality measures have been considered before in the literature in connection with the networked SIR model,
 for example in [Dekker, 2013],[Bucur et al., 2020] and [Yuan et al., 2013], but I have not seen papers where aggregates of centrality measures, for nodes in the different compartments, are tracked over the duration of a simulation,
-which is what we will be looking at here.<br>
+which is what we will be looking at here.
 
-### What is a network centrality measure?
+## What is a network centrality measure?
 In the following let \(V\) be the vertex set of a finite graph \(G\), with cardinality \(|V|=N\).
 
 Network centrality measures offer a way to quantify connectivity properties of a vertex \(v_j \in V\)
 according to some criteria. Depending on the application, the measure establishes the importance of the
 vertex from a connectivity standpoint.
 
-Well known centrality measures include for example <em>degree centrality</em>, <em>betweenness centrality</em>,
-<em>eigenvector centrality</em> and <em>closeness centrality</em> amongst others.
+Well known centrality measures include for example *degree centrality, betweenness centrality,
+eigenvector centrality* and *closeness centrality* amongst others.
 
-For example, the <em>degree centrality</em> \(C_D(v_j)\)of a vertex \(v_j\) is the number of edges that are adjacent to the it,
-and so coincides with the vertex degree \(deg(v_j)\).
+For example, the *degree centrality* \( C_D(v_j) \)of a vertex \(v_j\) is the number of edges that are adjacent to the it,
+and so coincides with the vertex degree \( deg(v_j) \).
 
 The betweenness centrality \(C_B(v_j)\) for \(v_j \in V\) is defined as the sum of the fractions of shortest paths (counting edges) in \(G\) going through
 \(v_j\) between all vertice pairs \(v_i,v_k \in V\), where \(i,k,j \in \{1,2,\ldots,N\}\)
@@ -46,14 +48,14 @@ but one may come across other factors in the literature.<br>
 Betweenness centrality can for example be used to identify bottlenecks in traffic networks,
 since traffic usually takes the shortest route from A to B.
 
-### Aggregates of centralities
+## Aggregates of centralities
 In my master's thesis I wanted to find some way to use dynamic centrality observations from simulations as predictors
 when applying SINDy. My thinking was that an infected node's centrality measure, for example considering degree centrality,
 would clearly influence the time derivative target that we want to approximate when using SINDy.
 The solution I came up with, was to use the fraction of the centrality sum accounted for by the individuals
 in the \(S(t),\,I(t)\) and \(R(t)\) vertex sets at time \(t\). If I may elaborate...
 
-Let $$C_*(v_i)$$ be any per-node centrality measure for a graph \(G\) with \(v_i \in V \), then $$ C_*(G) = \sum_{j=1}^N C_*(v_j) $$ is a graph invariant. The quatity
+Let \( C_*(v_i) \) be any per-node centrality measure for a graph \(G\) with \(v_i \in V \), then \( C_*(G) = \sum_{j=1}^N C_*(v_j) \) is a graph invariant. The quatity
 
 $$
 s_C(t) = \frac{1}{C_*(G)} \sum_{v_j \in S(t)} C_*(v_j)
@@ -73,10 +75,9 @@ The good news is, that the sum of CSFs is a conserved quantity, i.e. \(s_C + i_C
 which enables us to use som "tricks" when finding a model with SINDy.
 More on this in the final post in this series.
 
-### Simulation example
+## Simulation example
 Let's see what these CSF trajectories look like when using degree centrality and betweenness centrality.<br>
-I've made a small modification to the <samp>networked-sir.R</samp> code from 
-<a href="{% post_url 2021-12-14-networked-sir %}">previous post</a>.
+I've made a small modification to the <samp>networked-sir.R</samp> code from [the previous post](networked-sir.md).
 The <samp>networked_sir()</samp> function now takes an additional vector <samp>C</samp> as an argument which
 gives some per-vertex centrality measure. The CSFs are then computed using the <samp>csf()</samp> function,
 and returned in observation data frame. In the simulation below, we use degree centrality and betweenness centrality respectively.
@@ -85,12 +86,12 @@ and returned in observation data frame. In the simulation below, we use degree c
 <script src="https://gist.github.com/brandurjacobsen/e80abe22435248b890977a9c89af0fe6.js"></script>
 
 <figure align="center">
-  <img src="/static/images/net-sir-csf1.png" alt="simulation using degree centrality">
+  <img src="/blog/static/images/net-sir-csf1.png" alt="simulation using degree centrality">
   <figcaption>Plot 1 of networked SIR model using degree centrality for CSFs.</figcaption>
 </figure>
 
 <figure align="center">
-  <img src="/static/images/net-sir-csf2.png" alt="simulation using degree centrality">
+  <img src="/blog/static/images/net-sir-csf2.png" alt="simulation using degree centrality">
   <figcaption>Plot 2 of networked SIR model using betweenness centrality for CSFs.
   </figcaption>
 </figure>
@@ -106,13 +107,13 @@ predictors in regression where the target is the estimated derivative (i.e. the 
 The case is not so clear for betweenness-CSFs, since a vertex can have high betweenness but low degree.
 Even so, CSFs using degree and betweenness centrality are strongly correlated ( \( \approx 0.97 \) for the two \(i_C(t) \) time-series above).
 
-### Conclusion
+## Conclusion
 It appears that using CSFs provides us with additional information about how a pathogen spreads through
 a population in the networked SIR model.<br>
 In the next post I will be using CSFs as predictors in sparse regression when using SINDy,
 and leave it up to the LASSO algorithm to decide whether the CSF predictors should be included in the resulting model.
 
-<h3>References</h3>
+## References
 [Dekker, 2013] Dekker, A. H. Network centrality and super-spreaders in infectious disease epidemiology.
 Proc. - 20th Int. Congr. Model. Simulation, MODSIM 2013 331–337 (2013) doi:10.36334/modsim.2013.a5.dekker.
 
